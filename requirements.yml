@@ -1,0 +1,26 @@
+---
+- name: Configure FortiGate via FortiOS API
+  hosts: fortigate
+  gather_facts: no
+  collections:
+    - fortinet.fortios
+
+  vars:
+    ansible_httpapi_use_ssl: yes
+    ansible_httpapi_validate_certs: no
+    ansible_httpapi_port: 443
+    ansible_network_os: fortinet.fortios.fortios
+
+  tasks:
+    - name: Add a new VLAN
+      fortios_system_interface:
+        vdom: "root"
+        state: "present"
+        system_interface:
+          name: "VLAN100"
+          vlanid: 100
+          interface: "port1"
+          ip: "192.168.100.1 255.255.255.0"
+      register: result
+
+    - debug: var=result
